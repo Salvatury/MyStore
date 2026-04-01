@@ -10,5 +10,7 @@ namespace MyStore.Repositorios
             return await _dbContext.Set<TEntidad>().ToListAsync();
 
         }
+
+
     }
 }
