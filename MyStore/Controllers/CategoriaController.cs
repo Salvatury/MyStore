@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyStore.Contexto;
+using MyStore.Models;
 
 namespace MyStore.Controllers
 {
@@ -7,7 +8,13 @@ namespace MyStore.Controllers
     {
         public IActionResult Index()
         {
-            var categorias= _dbContext.Categorias.ToList();
+            var categorias= _dbContext.Categorias.Select(item =>
+              new CategoriaVM
+              {
+                  CategoriaId = item.CategoriaId,
+                  Nombre = item.Nombre
+              }).ToList();
+
             return View(categorias);
         }
     }
