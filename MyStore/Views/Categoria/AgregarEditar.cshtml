@@ -1,9 +1,13 @@
 ﻿@model CategoriaVM
+@{
+    var titulo = Model.CategoriaId == 0 ? "Nueva Categoria" : "Editar Categoria";
+    var btnClick = Model.CategoriaId == 0 ? "Agregar" : "Guardar cambios";
+}
 
 <div class="row">
     <div class="col-6">
 
-        <h2>Nueva Categoria</h2>
+        <h2>@titulo</h2>
         <hr />
         <form action="/Categoria/AgregarEditar" method="post">
             <input type="hidden" asp-for="CategoriaId" />
@@ -21,7 +25,7 @@
             }
 
             <div class="d-grid gap-2 d-md-block mt-4">
-                <button class="btn btn-primary" type="submit">Guardar</button>
+                <button class="btn btn-primary" type="submit">@btnClick</button>
                 <a href="/Categoria/Index" class="btn btn-warning">Volver</a>
             </div>
         </form>

@@ -30,7 +30,34 @@ namespace MyStore.Servicios
             await _categoriaRepositorio.AgregarAsync(entidad);
         }
 
+        public async Task<CategoriaVM?> TraerPorIdAsync(int id)
+        {
+            var categoria = await _categoriaRepositorio.TraerPorIdAsync(id);
+            var categoriaVM = new CategoriaVM();
+            if (categoria != null)
+            {
+                categoriaVM.Nombre = categoria.Nombre;
+                categoriaVM.CategoriaId = categoria.CategoriaId;
 
+            }
+            return categoriaVM;
+
+        }
+        public async Task EditarAsync(CategoriaVM viewModel)
+        {
+            var entidad = new Categoria
+            {
+                CategoriaId = viewModel.CategoriaId,
+                Nombre = viewModel.Nombre
+            };
+            await _categoriaRepositorio.EditarAsync(entidad);
+        }
+
+        public async Task EliminarAsync(int id)
+        {
+            var categoria = await _categoriaRepositorio.TraerPorIdAsync(id);
+            await _categoriaRepositorio.EliminarAsync(categoria!);
+        }
 
     }
 }

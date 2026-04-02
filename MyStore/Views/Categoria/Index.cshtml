@@ -22,10 +22,21 @@
             <tr>
                 <td>@item.Nombre</td>
                 <td style="width:120px">
-                    <a href="#" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen"></i></a>
-                    <button class=" btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i></button>
+                    <a href="/Categoria/AgregarEditar/@item.CategoriaId" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen"></i></a>
+                    <button class="btn btn-sm btn-danger" onclick="eliminarItem(@item.CategoriaId)"><i class="fa-solid fa-trash-can"></i></button>
                 </td>
             </tr>
         }
     </tbody>
+</table>
+<script>
+    function eliminarItem(id){
+        if(confirm("Los datos se borraran, desea continuar?")){
+            window.location.href= '@Url.Action("Eliminar", "Categoria")/'+id;
+        }
+    }
+
+
+</script>
+
 

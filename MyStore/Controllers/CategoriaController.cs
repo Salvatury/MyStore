@@ -13,9 +13,10 @@ namespace MyStore.Controllers
             return View(categorias);
         }
         [HttpGet]
-        public async Task<IActionResult> AgregarEditar()
+        public async Task<IActionResult> AgregarEditar(int id)
         {
-            return View();
+            var categoriaVM = await _categoriaServicio.TraerPorIdAsync(id);
+            return View(categoriaVM);
         }
 
         [HttpPost]
@@ -23,10 +24,25 @@ namespace MyStore.Controllers
         {
             ViewBag.Mensaje = null;
             if (!ModelState.IsValid)return View(entidadVM);
-            
-            await _categoriaServicio.AgregarAsync(entidadVM);
-            ViewBag.Mensaje = "Categoria agregada correctamente";
-            return View();
+            if(entidadVM.CategoriaId == 0)
+            {
+                await _categoriaServicio.AgregarAsync(entidadVM);
+                ModelState.Clear();
+                entidadVM = new CategoriaVM();
+                ViewBag.mensaje = "Categoria agregada correctamente";
+            }
+            else
+            {
+                await _categoriaServicio.EditarAsync(entidadVM);
+                ViewBag.Mensaje = "Categoria editada correctamente";
+            }
+            return View(entidadVM);
+        }
+
+        public async Task<IActionResult> Eliminar(int id)
+        {
+            await _categoriaServicio.EliminarAsync(id);
+            return RedirectToAction("Index");
         }
     }
 }
