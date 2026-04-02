@@ -43,8 +43,3 @@ El proyecto está organizado en varias capas:
 
 La aplicación utiliza **SQL Server** con **Entity Framework Core**.
 
-### Cadena de conexión
-La conexión se configura en el archivo:
-
-```json
-appsettings.json
