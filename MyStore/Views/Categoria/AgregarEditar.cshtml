@@ -1,0 +1,30 @@
+﻿@model CategoriaVM;
+
+<div class="row">
+    <div class="col-6">
+
+        <h2>Nueva Categoria</h2>
+        <hr />
+        <form action="/Categoria/AgregarEditar" method="post">
+            <input type="hidden" asp-for="CategoriaId" />
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input type="text" class="form-control" asp-for="Nombre" autocomplete="off">
+            </div>
+            @if(ViewBag.mensaje != null)
+            {
+                <div class="alert alert-success" role="alert">
+                    @ViewBag.mensaje
+                </div>
+            }
+            <div class="d-grid gap-2 d-md-block mt-4">
+                <button class="btn btn-primary" type="submit">Guardar</button>
+                <a href="/Categoria/Index" class="btn btn-warning">Volver</a>
+
+            </div>
+
+        </form>
+    </div>
+
+
+</div>

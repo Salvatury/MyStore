@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MyStore.Models;
 using MyStore.Servicios;
 
 namespace MyStore.Controllers
@@ -7,9 +8,22 @@ namespace MyStore.Controllers
     {
         public async Task<IActionResult> Index()
         {
-            var categorias= await _categoriaServicio.GetAllAsync();
+            var categorias= await _categoriaServicio.TraerTodosAsync();
 
             return View(categorias);
+        }
+        [HttpGet]
+        public async Task<IActionResult> AgregarEditar()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AgregarEditar(CategoriaVM entidadVM)
+        {
+            await _categoriaServicio.AgregarAsync(entidadVM);
+            ViewBag.Mensaje = "Categoria agregada correctamente";
+            return View();
         }
     }
 }
