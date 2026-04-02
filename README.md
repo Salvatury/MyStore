@@ -1,45 +1,50 @@
 # MyStore
 
-MyStore es una aplicación web desarrollada con **ASP.NET Core MVC**, orientada a la práctica de conceptos como:
+MyStore es una aplicación web desarrollada con **ASP.NET Core MVC** como práctica para aprender y afianzar conceptos de desarrollo web con .NET, Razor, Entity Framework Core y SQL Server.
 
-- Arquitectura en capas
-- CRUD
-- Entity Framework Core
-- SQL Server
-- Razor Views
-- Repositorio genérico
-- Servicios
+## Funcionalidades actuales
+
+### Módulo Categorías
+- Listado de categorías
+- Alta de nuevas categorías
+- Edición de categorías existentes
+- Eliminación de categorías
+- Confirmación visual de borrado con **SweetAlert2**
+- Validación de campos obligatorios
 
 ## Tecnologías utilizadas
 
 - ASP.NET Core MVC
 - C#
+- Razor Views
 - Entity Framework Core
 - SQL Server
-- Razor
 - Bootstrap
 - Font Awesome
+- SweetAlert2
 
-## Estructura del proyecto
+## Arquitectura del proyecto
 
-El proyecto está organizado en varias capas:
+El proyecto está organizado en capas para mantener una mejor separación de responsabilidades:
 
-- **Controllers**: manejan las solicitudes HTTP
+- **Controllers**: reciben las solicitudes y controlan el flujo de la aplicación
 - **Servicios**: contienen la lógica de negocio
 - **Repositorios**: acceso a datos mediante repositorio genérico
 - **Entidades**: modelos de base de datos
-- **Models**: ViewModels usados en las vistas
-- **Views**: vistas Razor para la interfaz
+- **Models**: ViewModels utilizados en las vistas
 - **Contexto**: configuración del `DbContext`
+- **Views**: interfaz construida con Razor
 
-## Funcionalidades actuales
+## Funcionalidad implementada hasta el momento
 
-### Categorías
-- Listado de categorías
-- Alta de nuevas categorías
-- Validación de campos obligatorios
+Actualmente el proyecto permite trabajar con categorías mediante una pantalla que incluye:
+
+- botón para crear nuevas categorías
+- formulario reutilizable para agregar y editar
+- botón para editar registros existentes
+- botón para eliminar con confirmación previa
+- mensajes de confirmación para operaciones realizadas correctamente
 
 ## Base de datos
 
-La aplicación utiliza **SQL Server** con **Entity Framework Core**.
-
+La aplicación utiliza **SQL Server** junto con **Entity Framework Core** para la persistencia de datos.
