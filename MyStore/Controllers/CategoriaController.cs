@@ -21,6 +21,7 @@ namespace MyStore.Controllers
         [HttpPost]
         public async Task<IActionResult> AgregarEditar(CategoriaVM entidadVM)
         {
+            if(!ModelState.IsValid) return View(entidadVM);
             await _categoriaServicio.AgregarAsync(entidadVM);
             ViewBag.Mensaje = "Categoria agregada correctamente";
             return View();
