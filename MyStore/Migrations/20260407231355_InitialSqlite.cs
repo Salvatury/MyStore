@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MyStore.Migrations
 {
     /// <inheritdoc />
-    public partial class firstMigration : Migration
+    public partial class InitialSqlite : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,9 +17,9 @@ namespace MyStore.Migrations
                 name: "Categorias",
                 columns: table => new
                 {
-                    CategoriaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    CategoriaId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Nombre = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,12 +30,12 @@ namespace MyStore.Migrations
                 name: "Usuarios",
                 columns: table => new
                 {
-                    UsuarioId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    NombreCompleto = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Correo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Contraseña = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TipoUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UsuarioId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    NombreCompleto = table.Column<string>(type: "TEXT", nullable: false),
+                    Correo = table.Column<string>(type: "TEXT", nullable: false),
+                    Contraseña = table.Column<string>(type: "TEXT", nullable: false),
+                    TipoUsuario = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,14 +46,14 @@ namespace MyStore.Migrations
                 name: "Productos",
                 columns: table => new
                 {
-                    ProductoId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CategoriaId = table.Column<int>(type: "int", nullable: false),
-                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductoId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CategoriaId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Nombre = table.Column<string>(type: "TEXT", nullable: false),
+                    Descripcion = table.Column<string>(type: "TEXT", nullable: false),
                     Precio = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    Stock = table.Column<int>(type: "int", nullable: false),
-                    NombreImagen = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Stock = table.Column<int>(type: "INTEGER", nullable: false),
+                    NombreImagen = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -70,10 +70,10 @@ namespace MyStore.Migrations
                 name: "Ordenes",
                 columns: table => new
                 {
-                    OrdenId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FechaOrden = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UsuarioId = table.Column<int>(type: "int", nullable: false),
+                    OrdenId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FechaOrden = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UsuarioId = table.Column<int>(type: "INTEGER", nullable: false),
                     PrecioTotal = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
                 },
                 constraints: table =>
@@ -91,11 +91,11 @@ namespace MyStore.Migrations
                 name: "OrdenItems",
                 columns: table => new
                 {
-                    OrdenItemId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrdenId = table.Column<int>(type: "int", nullable: false),
-                    ProductoId = table.Column<int>(type: "int", nullable: false),
-                    Cantidad = table.Column<int>(type: "int", nullable: false),
+                    OrdenItemId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    OrdenId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProductoId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Cantidad = table.Column<int>(type: "INTEGER", nullable: false),
                     PrecioUnidad = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
                 },
                 constraints: table =>
