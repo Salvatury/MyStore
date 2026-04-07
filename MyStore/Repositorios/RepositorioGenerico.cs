@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyStore.Contexto;
+using System.Linq.Expressions;
 
 namespace MyStore.Repositorios
 {
@@ -8,6 +9,14 @@ namespace MyStore.Repositorios
         public async Task<IEnumerable<TEntidad>> TraerTodosAsync()
         {
             return await _dbContext.Set<TEntidad>().ToListAsync();
+
+        }
+        public async Task<IEnumerable<TEntidad>> TraerTodosAsync(Expression<Func<TEntidad, object>>[] incluidos)
+        {
+            IQueryable<TEntidad> query = _dbContext.Set<TEntidad>();
+            foreach (var incluye in incluidos) query = query.Include(incluye);
+
+            return await query.ToListAsync();
 
         }
 
