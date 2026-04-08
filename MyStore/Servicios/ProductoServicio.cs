@@ -3,42 +3,38 @@ using MyStore.Models;
 using MyStore.Repositorios;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.IdentityModel.Tokens;
 
 namespace MyStore.Servicios
 {
-    public class ProductoServicio
+    public class ProductoServicio(
+        RepositorioGenerico<Categoria> _repositorioCategoria,
+        RepositorioGenerico<Producto> _repositorioProducto,
+        IWebHostEnvironment _webHostEnvironment)
     {
-        RepositorioGenerico<Categoria> _repositorioCategoria;
-        RepositorioGenerico<Producto> _repositorioProducto;
-        IWebHostEnvironment _webHostEnvironment;
-
         public async Task<IEnumerable<ProductoVM>> TraerTodosAsync()
         {
             var productos = await _repositorioProducto.TraerTodosAsync(
                 incluidos: new Expression<Func<Producto, object>>[] { x => x.Categoria! }
+            );
 
-                );
-
-            var productoVM = productos.Select(item =>
-                new ProductoVM
+            var productoVM = productos.Select(item => new ProductoVM
+            {
+                ProductoId = item.ProductoId,
+                CategoriaId = item.CategoriaId,
+                Categoria = new CategoriaVM
                 {
-                    ProductoId = item.ProductoId,
-                    Categoria = new CategoriaVM
-                    {
-                        CategoriaId = item.Categoria!.CategoriaId,
-                        Nombre = item.Categoria!.Nombre
-                    },
-                    Nombre = item.Nombre,
-                    Descripcion = item.Descripcion,
-                    Precio = item.Precio,
-                    Stock = item.Stock,
-                    NombreImagen = item.NombreImagen,
-                }).ToList();
+                    CategoriaId = item.Categoria!.CategoriaId,
+                    Nombre = item.Categoria!.Nombre
+                },
+                Nombre = item.Nombre,
+                Descripcion = item.Descripcion,
+                Precio = item.Precio,
+                Stock = item.Stock,
+                NombreImagen = item.NombreImagen
+            }).ToList();
 
             return productoVM;
-
-        }//ok
+        }
 
         public async Task<ProductoVM> TraerPorIdAsync(int id)
         {
@@ -52,19 +48,15 @@ namespace MyStore.Servicios
                 productoVM = new ProductoVM
                 {
                     ProductoId = producto.ProductoId,
-                    Categoria = new CategoriaVM
-                    {
-                        CategoriaId = producto.Categoria!.CategoriaId,
-                        Nombre = producto.Categoria!.Nombre,
-                    },
+                    CategoriaId = producto.CategoriaId,
                     Nombre = producto.Nombre,
                     Descripcion = producto.Descripcion,
                     Precio = producto.Precio,
                     Stock = producto.Stock,
-                    NombreImagen = producto.NombreImagen,
+                    NombreImagen = producto.NombreImagen
                 };
-
             }
+
             productoVM.Categorias = categorias.Select(item => new SelectListItem
             {
                 Value = item.CategoriaId.ToString(),
@@ -72,11 +64,7 @@ namespace MyStore.Servicios
             }).ToList();
 
             return productoVM;
-
-
-        }//revisar
-
-
+        }
 
         public async Task AgregarAsync(ProductoVM viewModel)
         {
@@ -85,15 +73,18 @@ namespace MyStore.Servicios
                 string uploadFolder = Path.Combine(_webHostEnvironment.WebRootPath, "imagenes");
                 string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(viewModel.ArchivoImagen.FileName);
                 string filePath = Path.Combine(uploadFolder, uniqueFileName);
-                
+
                 using (var stream = new FileStream(filePath, FileMode.Create))
+                {
                     await viewModel.ArchivoImagen.CopyToAsync(stream);
+                }
 
                 viewModel.NombreImagen = uniqueFileName;
             }
+
             var entidad = new Producto
             {
-                CategoriaId = viewModel.Categoria.CategoriaId,
+                CategoriaId = viewModel.CategoriaId,
                 Nombre = viewModel.Nombre,
                 Descripcion = viewModel.Descripcion,
                 Precio = viewModel.Precio,
@@ -102,11 +93,13 @@ namespace MyStore.Servicios
             };
 
             await _repositorioProducto.AgregarAsync(entidad);
-        }//revisar
+        }
 
         public async Task EditarAsync(ProductoVM viewModel)
         {
             var producto = await _repositorioProducto.TraerPorIdAsync(viewModel.ProductoId);
+
+            if (producto == null) return;
 
             if (viewModel.ArchivoImagen != null)
             {
@@ -115,16 +108,19 @@ namespace MyStore.Servicios
                 string filePath = Path.Combine(uploadFolder, uniqueFileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
+                {
                     await viewModel.ArchivoImagen.CopyToAsync(stream);
+                }
 
-
-                if (!producto.NombreImagen.IsNullOrEmpty())
+                if (!string.IsNullOrEmpty(producto.NombreImagen))
                 {
                     var imagenAnterior = producto.NombreImagen;
                     string borrarRutaArchivo = Path.Combine(uploadFolder, imagenAnterior);
 
-                    if (File.Exists(borrarRutaArchivo)) File.Delete(borrarRutaArchivo);
-
+                    if (File.Exists(borrarRutaArchivo))
+                    {
+                        File.Delete(borrarRutaArchivo);
+                    }
                 }
 
                 viewModel.NombreImagen = uniqueFileName;
@@ -134,7 +130,7 @@ namespace MyStore.Servicios
                 viewModel.NombreImagen = producto.NombreImagen;
             }
 
-            producto.CategoriaId = viewModel.Categoria.CategoriaId;
+            producto.CategoriaId = viewModel.CategoriaId;
             producto.Nombre = viewModel.Nombre;
             producto.Descripcion = viewModel.Descripcion;
             producto.Precio = viewModel.Precio;
@@ -142,14 +138,14 @@ namespace MyStore.Servicios
             producto.NombreImagen = viewModel.NombreImagen;
 
             await _repositorioProducto.EditarAsync(producto);
-
-
         }
 
         public async Task EliminarAsync(int id)
         {
             var producto = await _repositorioProducto.TraerPorIdAsync(id);
-            await _repositorioProducto.EliminarAsync(producto!);
-        }    
+            if (producto == null) return;
+
+            await _repositorioProducto.EliminarAsync(producto);
+        }
     }
 }
