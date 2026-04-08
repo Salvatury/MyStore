@@ -1,0 +1,71 @@
+﻿@model ProductoVM
+
+@{
+    var titulo = Model.ProductoId == 0 ? "Nuevo Producto" : "Editar Producto";
+    var btnClick = Model.ProductoId == 0 ? "Agregar" : "Guardar cambios";
+}
+
+<div class="row">
+    <div class="col-6">
+
+        <h2>@titulo</h2>
+        <hr />
+        <form action="/Producto/AgregarEditar" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="ProductoId" />
+            <input type="hidden" asp-for="NombreImagen" />
+
+            <div class="mb-3">
+                <label class="form-label">Categoria</label>
+                <select class="form-select" asp-for="CategoriaId" asp-items="Model.Categorias">
+                    <option value="">Seleccione una categoria</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input type="text" class="form-control" asp-for="Nombre" autocomplete="off" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Descripcion</label>
+                <textarea class="form-control" asp-for="Descripcion"></textarea>
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Precio</label>
+                <input type="number" class="form-control" asp-for="Precio" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Stock</label>
+                <input type="number" class="form-control" asp-for="Stock" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Imagen</label>
+                <input type="file" class="form-control" asp-for="ArchivoImagen" />
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.NombreImagen))
+            {
+                <div class="mb-3">
+                    <img src="~/imagenes/@Model.NombreImagen" width="100" />
+                </div>
+            }
+
+            @if (ViewBag.Mensaje != null)
+            {
+                <div class="alert alert-success" role="alert">
+                    @ViewBag.Mensaje
+                </div>
+            }
+
+            <div class="d-grid gap-2 d-md-block mt-4">
+                <button class="btn btn-primary" type="submit">@btnClick</button>
+                <a href="/Producto/Index" class="btn btn-warning">Volver</a>
+            </div>
+        </form>
+    </div>
+</div>
